@@ -1,0 +1,24 @@
+name: Deploy to Kubernetes
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ maste3r ]
+
+jobs:
+  deploy:
+    name: Deploy to Kubernetes
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+    - name: Create kubeconfig
+      run: |
+        mkdir /etc/rancher/k3s
+        echo ${{ secrets.KUBE_CONFIG }} | base64 --decode > /etc/rancher/k3s/k3s.yaml
+        cat /etc/rancher/k3s/k3s.yaml
+    - name: Use context
+      run: kubectl config use-context kube-public
+    - name: Deploy to k3s
+      run: kubectl apply -f k3s/
