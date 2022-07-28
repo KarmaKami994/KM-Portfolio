@@ -1,2 +1,3 @@
-FROM apache
-COPY . /var/www/html
+FROM nginx:latest
+RUN rm -f /usr/share/nginx/html*
+COPY . /usr/share/nginx/html
